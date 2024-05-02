@@ -58,7 +58,7 @@
               </p>
               <p>
                 Vous n'avez pas de compte ?
-                <a href="#!" class="link-info">Enregistrez-vous</a>
+                <a href="/register" class="link-info">Enregistrez-vous</a>
               </p>
             </form>
           </div>
