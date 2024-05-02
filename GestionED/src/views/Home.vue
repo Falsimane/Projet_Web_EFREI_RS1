@@ -7,7 +7,19 @@
                     <div class="col-lg-7 px-0">
                         <div class="d-flex align-items-center h-100">
                             <div class="w-100">
-                                <h1 class="display-1">Bienvenue sur Vaultify</h1>
+                                <div class="row">
+                                    <div class="col-lg-7">
+                                        <h1 class="" style="letter-spacing: 1px">
+                                            Bienvenue sur Vaultify
+                                        </h1>
+                                    </div>
+
+                                    <div class="col-lg-5">
+                                        <img src="../assets/images/lettre-v.png" class="img-fluid" alt="Sample image"
+                                            style="width: 60px" />
+                                    </div>
+                                </div>
+
                                 <p class="lead">Gardez vos fichiers en sécurité</p>
                                 <a href="/login" class="btn btn-info btn-lg">Connectez-vous</a>
                                 <a href="/register" class="btn btn-info btn-lg m-4">Créer un compte</a>
