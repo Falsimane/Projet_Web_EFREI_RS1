@@ -60,20 +60,31 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Login",
   data() {
     return {
       email: "",
       password: "",
-      emailError: false,
+      emailError: false
     };
   },
   methods: {
-    login() {
+    async login() {
       if (!this.emailError) {
-        console.log("Logging in with:", this.email, this.password);
-        // Login logic here
+        try {
+          const response = await axios.post("/api/utilisateurs/login", {
+            email: this.email,
+            password: this.password
+          });
+          console.log("Utilisateur connecté:", response.data);
+          // Rediriger l'utilisateur vers une autre page ou effectuer une autre action
+        } catch (error) {
+          console.error("Erreur de connexion:", error);
+          // Gérer les erreurs, par exemple afficher un message à l'utilisateur
+        }
       }
     },
     validateEmail() {
