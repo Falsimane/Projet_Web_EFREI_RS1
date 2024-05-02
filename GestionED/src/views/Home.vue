@@ -15,8 +15,12 @@
                                     </div>
 
                                     <div class="col-lg-5">
-                                        <img src="../assets/images/lettre-v.png" class="img-fluid" alt="Sample image"
-                                            style="width: 60px" />
+                                        <img src="../assets/images/lettre-v.png" 
+                                        class="img-fluid" 
+                                        alt="Sample image"
+                                        style="width: 60px" 
+                                        draggable="false"
+                                        />
                                     </div>
                                 </div>
 

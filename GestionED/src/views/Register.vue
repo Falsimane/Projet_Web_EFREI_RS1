@@ -8,7 +8,7 @@
                             <div class="row">
                                 <div class="col-lg-7">
                                     <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
-                                        Page d'enregistrement
+                                        Page de création de compte
                                     </h3>
                                 </div>
 
@@ -19,26 +19,39 @@
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="form2ExampleName" class="form-control form-control-lg"
-                                    v-model="name" />
-                                <label class="form-label" for="form2ExampleName">Nom</label>
+                                <label class="form-label" for="name">Nom</label>
+                                <input type="text" id="name" class="form-control form-control-lg" v-model="name"
+                                    pattern="^[a-zA-Z0-9\s]+$" required />
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="email" id="form2ExampleEmail" class="form-control form-control-lg"
-                                    v-model="email" />
-                                <label class="form-label" for="form2ExampleEmail">Adresse email</label>
+                                <label class="form-label" for="firstname">Prénom</label>
+                                <input type="text" id="firstname" class="form-control form-control-lg"
+                                    v-model="firstname" required />
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="form2ExamplePassword" class="form-control form-control-lg"
-                                    v-model="password" />
-                                <label class="form-label" for="form2ExamplePassword">Mot de passe</label>
+                                <label class="form-label" for="email">Adresse email</label>
+                                <input type="email" id="email" class="form-control form-control-lg" v-model="email"
+                                    @blur="validateEmail" required />
+                                <div v-if="emailError" class="alert alert-danger mt-2">
+                                    L'adresse email ne respecte pas le format requis.
+                                </div>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <label class="form-label" for="password">Mot de passe</label>
+                                <input type="password" id="password" class="form-control form-control-lg"
+                                    v-model="password" @blur="validatePassword" required />
+                                <div v-if="passwordError" class="alert alert-danger mt-2">
+                                    Le mot de passe doit contenir au moins 12 caractères, un chiffre, une majuscule et
+                                    un caractère spécial.
+                                </div>
                             </div>
 
                             <div class="pt-1 mb-4">
                                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-lg btn-block"
-                                    type="submit">
+                                    type="submit" :disabled="!formIsValid">
                                     S'inscrire
                                 </button>
                             </div>
@@ -59,50 +72,35 @@
 </template>
 
 <script>
+
 export default {
     name: "Register",
     data() {
         return {
             name: "",
+            firstname: "",
             email: "",
-            password: ""
+            password: "",
+            emailError: false,
+            passwordError: false
         };
     },
+    computed: {
+        formIsValid() {
+            return this.name && this.firstname && this.email && this.password && !this.emailError && !this.passwordError;
+        }
+    },
     methods: {
-        register() {
-            // Logic for registration goes here
-            console.log("Name:", this.name);
-            console.log("Email:", this.email);
-            console.log("Password:", this.password);
+        validateEmail() {
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            this.emailError = !pattern.test(this.email);
+        },
+        validatePassword() {
+            const pattern = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).{12,}$/;
+            this.passwordError = !pattern.test(this.password);
         }
     }
 };
 </script>
 
-<style scoped>
-@media (max-width: 600px) {
-    .bg-image-vertical {
-        position: relative;
-        overflow: hidden;
-        background-repeat: no-repeat;
-        background-position: right center;
-        background-size: auto 100%;
-    }
-
-    .container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-}
-
-@media (min-width: 601px) {
-    .container {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-}
-</style>
+<style scoped></style>
