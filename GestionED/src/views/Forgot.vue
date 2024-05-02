@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-lg-7">
                     <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
-                        <form style="max-width: 23rem; width: 100%" @submit.prevent="register">
+                        <form style="max-width: 23rem; width: 100%">
                             <div class="row">
                                 <div class="col-lg-7">
                                     <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
-                                        Page d'enregistrement
+                                        Mot de passe oublié
                                     </h3>
                                 </div>
 
@@ -19,32 +19,19 @@
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="form2ExampleName" class="form-control form-control-lg"
-                                    v-model="name" />
-                                <label class="form-label" for="form2ExampleName">Nom</label>
-                            </div>
-
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="email" id="form2ExampleEmail" class="form-control form-control-lg"
-                                    v-model="email" />
-                                <label class="form-label" for="form2ExampleEmail">Adresse email</label>
-                            </div>
-
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="form2ExamplePassword" class="form-control form-control-lg"
-                                    v-model="password" />
-                                <label class="form-label" for="form2ExamplePassword">Mot de passe</label>
+                                <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                                <label class="form-label" for="form2Example18">Adresse email</label>
                             </div>
 
                             <div class="pt-1 mb-4">
                                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-lg btn-block"
-                                    type="submit">
-                                    S'inscrire
+                                    type="button">
+                                    Réinitialiser le mot de passe
                                 </button>
                             </div>
 
                             <p class="small mb-5 pb-lg-2">
-                                <a class="text-muted" href="/login">J'ai déjà un compte</a>
+                                <a class="text-muted" href="/login">Retour à la connexion</a>
                             </p>
                         </form>
                     </div>
@@ -60,22 +47,7 @@
 
 <script>
 export default {
-    name: "Register",
-    data() {
-        return {
-            name: "",
-            email: "",
-            password: ""
-        };
-    },
-    methods: {
-        register() {
-            // Logic for registration goes here
-            console.log("Name:", this.name);
-            console.log("Email:", this.email);
-            console.log("Password:", this.password);
-        }
-    }
+    name: "Forgot",
 };
 </script>
 

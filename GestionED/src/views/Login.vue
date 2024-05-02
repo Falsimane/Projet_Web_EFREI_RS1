@@ -54,7 +54,7 @@
               </div>
 
               <p class="small mb-5 pb-lg-2">
-                <a class="text-muted" href="#!">Mot de passe oublié ?</a>
+                <a class="text-muted" href="/forgot">Mot de passe oublié ?</a>
               </p>
               <p>
                 Vous n'avez pas de compte ?
