@@ -2,9 +2,6 @@
     <div>
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-          <!-- Bouton de retour au dashboard -->
-          <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
-          
           <a class="navbar-brand" href="#">Fonction de recherche</a>
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
