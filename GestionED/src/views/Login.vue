@@ -20,44 +20,38 @@
                     class="img-fluid"
                     alt="Sample image"
                     style="width: 60px"
-                    draggable="false"
                   />
                 </div>
               </div>
 
-              <div data-mdb-input-init class="form-outline mb-4">
-                <label class="form-label" for="form2Example18">Adresse email</label>
+              <div class="form-outline mb-4">
+                <label class="form-label" for="email">Adresse email</label>
                 <input
                   type="email"
-                  id="form2Example18"
+                  id="email"
                   class="form-control form-control-lg"
                   v-model="email"
-                  @blur="validateEmail"
+                  required
                 />
-                <div v-if="emailError" class="alert alert-danger mt-2">
-                  L'adresse email ne respecte pas le format requis.
-                </div>
               </div>
 
-              <div data-mdb-input-init class="form-outline mb-4">
-                <label class="form-label" for="form2Example28">Mot de passe</label>
+              <div class="form-outline mb-4">
+                <label class="form-label" for="password">Mot de passe</label>
                 <input
                   type="password"
-                  id="form2Example28"
+                  id="password"
                   class="form-control form-control-lg"
                   v-model="password"
                   required
                 />
               </div>
 
+              <div v-if="loginError" class="alert alert-danger">
+                {{ loginError }}
+              </div>
+
               <div class="pt-1 mb-4">
-                <button
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  class="btn btn-info btn-lg btn-block"
-                  type="submit"
-                  :disabled="!formIsValid"
-                >
+                <button class="btn btn-info btn-lg btn-block" type="submit">
                   Connexion
                 </button>
               </div>
@@ -94,36 +88,30 @@ export default {
     return {
       email: "",
       password: "",
-      emailError: false,
+      loginError: "",
     };
   },
   methods: {
-    async login() {
-      if (!this.emailError) {
-        try {
-          const response = await axios.post(
-            "http://127.0.0.1:5000/api/utilisateurs/login",
-            {
-              email: this.email,
-              password: this.password,
-            }
-          );
+    login() {
+      axios
+        .post("http://localhost:5000/api/utilisateurs/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
           console.log("Utilisateur connecté:", response.data);
           this.$router.push("/dashboard");
-        } catch (error) {
-          console.error("Erreur de connexion:", error.response.data.message);
-        }
-      }
-    },
-    validateEmail() {
-      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      this.emailError = !pattern.test(this.email);
-    },
-  },
-  computed: {
-    formIsValid() {
-      return this.email && this.password && !this.emailError;
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.loginError = "Email ou mot de passe invalide";
+          } else {
+            this.loginError = "Une erreur est survenue lors de la connexion";
+          }
+        });
     },
   },
 };
 </script>
+
+<style scoped></style>
