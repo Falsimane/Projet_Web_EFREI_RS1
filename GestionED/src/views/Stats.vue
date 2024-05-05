@@ -9,20 +9,6 @@
           </button>
           
           <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Menu déroulant avec les autres options du dashboard principal -->
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Autres options du dashboard
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <button @click="gestionUtilisateurs" class="dropdown-item">Gestion des utilisateurs</button>
-                  <button @click="fonctionRecherche" class="dropdown-item">Fonction de recherche</button>
-                  <button @click="impression" class="dropdown-item">Impression</button>
-                </div>
-              </li>
-            </ul>
-            
             <!-- Boutons de statistiques -->
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -30,6 +16,15 @@
               </li>
               <li class="nav-item">
                 <button @click="autresStatistiques" class="nav-link btn btn-link">Autres statistiques</button>
+              </li>
+              <li class="nav-item">
+                <router-link to="/users" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Profils</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/search" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Fonction de recherche</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/print" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Impression</router-link>
               </li>
               <li class="nav-item">
                 <!-- Bouton de retour au dashboard -->
