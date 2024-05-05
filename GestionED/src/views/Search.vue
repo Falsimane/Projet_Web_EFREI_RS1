@@ -3,9 +3,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
           <!-- Bouton de retour au dashboard -->
-          <button @click="retourDashboard" class="btn btn-link mr-3">
-            <i class="fas fa-arrow-left"></i> Retour au dashboard
-          </button>
+          <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
           
           <a class="navbar-brand" href="#">Fonction de recherche</a>
           
@@ -27,6 +25,12 @@
                   <button @click="impression" class="dropdown-item">Impression</button>
                 </div>
               </li>
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <!-- Bouton de retour au dashboard -->
+                  <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
+                </li>
+              </ul>
             </ul>
           </div>
         </div>
@@ -56,6 +60,8 @@
         <div v-else class="mt-4">
           <p>Aucun résultat trouvé pour la recherche "{{ searchQuery }}"</p>
         </div>
+
+        
       </div>
     </div>
   </template>
@@ -74,7 +80,7 @@
         this.$router.push({ name: 'Dashboard' });
       },
       afficherProfils() {
-        // Redirection vers la page des profils
+        // Redirection vers la page de gestion des utilisateurs
         this.$router.push({ name: 'Profils' });
       },
       afficherStatistiques() {

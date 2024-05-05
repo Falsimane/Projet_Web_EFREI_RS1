@@ -1,8 +1,9 @@
 <template>
     <div>
+      <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-          <a class="navbar-brand" href="#">Statistiques</a>
+          <a class="navbar-brand" href="#">Impression</a>
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -13,37 +14,40 @@
             <ul class="navbar-nav mr-auto">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Autres options du dashboard
+                  Options du dashboard
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <button @click="gestionUtilisateurs" class="dropdown-item">Gestion des utilisateurs</button>
+                  <button @click="afficherProfils" class="dropdown-item">Profils</button>
+                  <button @click="afficherStatistiques" class="dropdown-item">Statistiques</button>
                   <button @click="fonctionRecherche" class="dropdown-item">Fonction de recherche</button>
                   <button @click="impression" class="dropdown-item">Impression</button>
                 </div>
               </li>
-            </ul>
-            
-            <!-- Boutons de statistiques -->
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <button @click="documentsParType" class="nav-link btn btn-link">Documents par type</button>
-              </li>
-              <li class="nav-item">
-                <button @click="autresStatistiques" class="nav-link btn btn-link">Autres statistiques</button>
-              </li>
-              <li class="nav-item">
-                <!-- Bouton de retour au dashboard -->
-                <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
-              </li>
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <!-- Bouton de retour au dashboard -->
+                  <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
+                </li>
+              </ul>
             </ul>
           </div>
         </div>
       </nav>
-  
+    
       <!-- Contenu de la page -->
       <div class="container">
-        <!-- Ici vous pouvez ajouter le contenu des statistiques -->
-        <p>Contenu de la page des statistiques...</p>
+        <!-- Ici vous pouvez ajouter le contenu de la page d'impression -->
+        <h1>Impression</h1>
+        <p>Sélectionnez le document que vous souhaitez imprimer :</p>
+        <ul>
+          <li>
+            <button @click="imprimerDocument('document1.pdf')">Document 1</button>
+          </li>
+          <li>
+            <button @click="imprimerDocument('document2.pdf')">Document 2</button>
+          </li>
+          <!-- Ajoutez d'autres documents ici -->
+        </ul>
       </div>
     </div>
   </template>
@@ -71,13 +75,11 @@
         // Redirection vers la page d'impression
         this.$router.push({ name: 'Impression' });
       },
-      documentsParType() {
-        // Redirection vers la page affichant les documents par type
-        this.$router.push({ name: 'DocumentsParType' });
-      },
-      autresStatistiques() {
-        // Redirection vers d'autres statistiques
-        this.$router.push({ name: 'AutresStatistiques' });
+      imprimerDocument(nomDocument) {
+        // Simuler l'impression du document
+        console.log("Impression du document :", nomDocument);
+        // Appel de la fonction native d'impression
+        window.print();
       }
     }
   };

@@ -2,11 +2,6 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
-        <!-- Bouton de retour au dashboard -->
-        <button @click="retourDashboard" class="btn btn-link mr-3">
-          <i class="fas fa-arrow-left"></i> Retour au dashboard
-        </button>
-        
         <a class="navbar-brand" href="#">Gestion des utilisateurs</a>
         
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,9 +16,9 @@
                 Options
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <button @click="afficherStatistiques" class="dropdown-item">Statistiques</button>
-                <button @click="fonctionRecherche" class="dropdown-item">Fonction de recherche</button>
-                <button @click="impression" class="dropdown-item">Impression</button>
+                <router-link to="/stats" class="dropdown-item">Statistiques</router-link>
+                <router-link to="/search" class="dropdown-item">Fonction de recherche</router-link>
+                <router-link to="/print" class="dropdown-item">Impression</router-link>
               </div>
             </li>
           </ul>
@@ -38,6 +33,10 @@
             </li>
             <li class="nav-item">
               <button @click="supprimerUtilisateur" class="nav-link btn btn-link">Supprimer utilisateur</button>
+            </li>
+            <li class="nav-item">
+              <!-- Bouton de retour au dashboard -->
+              <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
             </li>
           </ul>
         </div>
@@ -59,6 +58,10 @@ export default {
       // Redirection vers le dashboard
       this.$router.push({ name: 'Dashboard' });
     },
+    afficherProfils() {
+      // Redirection vers la page de gestion des utilisateurs
+      this.$router.push({ name: 'Profils' });
+    },
     afficherStatistiques() {
       // Redirection vers la page des statistiques
       this.$router.push({ name: 'Statistiques' });
@@ -70,7 +73,7 @@ export default {
     impression() {
       // Redirection vers la page d'impression
       this.$router.push({ name: 'Impression' });
-    },
+      },
     nouvelUtilisateur() {
       // Redirection vers la page de création d'un nouvel utilisateur
       this.$router.push({ name: 'NouvelUtilisateur' });
