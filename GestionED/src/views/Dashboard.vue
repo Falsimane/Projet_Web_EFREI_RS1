@@ -21,7 +21,7 @@
             <router-link to="/print" class="nav-link btn btn-link">Impression</router-link>
           </li>
           <li class="nav-item">
-            <button @click="deconnexion" class="nav-link btn btn-link">Déconnexion</button>
+            <button @click="logout" class="nav-link btn btn-link">Déconnexion</button>
           </li>
         </ul>
       </div>
@@ -48,8 +48,12 @@ export default {
       // Redirection vers la page d'impression
       this.$router.push({ name: 'Impression' });
     },
-    deconnexion() {
-      // Code pour gérer la déconnexion de l'utilisateur
+    logout() {
+      // Supprimez le token d'authentification ou toute autre donnée de session
+      localStorage.removeItem('authToken');
+
+      // Redirigez l'utilisateur vers Home.vue
+      this.$router.push('/');
     }
   }
 };
