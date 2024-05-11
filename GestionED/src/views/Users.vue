@@ -3,13 +3,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
         <a class="navbar-brand" href="#">Gestion des utilisateurs</a>
-        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Boutons de gestion des utilisateurs -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <router-link to="/stats" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Statistiques</router-link>
@@ -21,7 +18,6 @@
               <router-link to="/print" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Impression</router-link>
             </li>
             <li class="nav-item">
-              <!-- Bouton de retour au dashboard -->
               <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
             </li>
             <li class="nav-item">
@@ -32,23 +28,22 @@
       </div>
     </nav>
 
-    <!-- Contenu de la page -->
     <div class="container">
-      <!-- Ici vous pouvez ajouter le contenu de la page de gestion des utilisateurs -->
       <p>Contenu de la page de gestion des utilisateurs</p>
       <h1>Gestion des Utilisateurs</h1>
       <div>
-        <input v-model="newUser.name" placeholder="Nom">
-        <input v-model="newUser.firstname" placeholder="Prénom">
-        <input v-model="newUser.email" placeholder="Email" @blur="validateEmail">
+        <input v-model="User.name" placeholder="Nom">
+        <input v-model="User.firstname" placeholder="Prénom">
+        <input v-model="User.email" placeholder="Email" @blur="validateEmail">
         <span>{{ emailError }}</span>
-        <input v-model="newUser.password" type="password" @blur="validatePassword">
+        <input v-model="User.password" type="password" placeholder="Mot de passe" @blur="validatePassword">
         <span>{{ passwordError }}</span>
-        <button @click="addUser" :disabled="!formIsValid">Ajouter Utilisateur</button>
-      </div>    
-      <!-- Liste des utilisateurs avec options pour modifier et supprimer -->
+        <button @click="addToAPI" :disabled="!formIsValid">Ajouter Utilisateur</button>
+      </div>
       <ul class="list-group">
-        <li class="list-group-item" v-for="user in users" :key="user._id">
+        <br>
+        {{ User.name }} - {{ User.firstname }} - {{ User.email }}
+        <li class="list-group-item" v-for="user in usersList" :key="user._id">
           {{ user.name }} {{ user.firstname }} - {{ user.email }}
           <button class="btn btn-primary" @click="editUser(user)">Modifier</button>
           <button class="btn btn-danger" @click="deleteUser(user._id)">Supprimer</button>
@@ -58,17 +53,18 @@
   </div>
 </template>
 
+
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
+  name: "Users",
   data() {
     return {
-      users: [],
-      newUser: { name: "", firstname: "", email: "", password: "" },
-      currentUser: { name: "", firstname: "", email: "", password: "" },
+      usersList: [], // Liste des utilisateurs pour l'affichage
       emailError: "",
       passwordError: "",
+      User: [{ name: "", firstname: "", email: "", password: "" }], // Utilisé pour l'ajout et la mise à jour
     };
   },
   methods: {
@@ -93,21 +89,22 @@ export default {
       this.$router.push({ name: 'Impression' });
     },
     fetchUsers() {
-      axios.get('/api/users')
+      axios.get('http://localhost:5000/api/users')
         .then(response => {
           console.log("Utilisateurs chargés:", response.data); // Ajoutez ceci pour voir les données reçues
-          this.users = response.data;
+          this.usersList = response.data;
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des utilisateurs:", error);
         });
     },
-    addUser() {
-      if (!this.formIsValid) return;
-      axios.post('http://localhost:5000/api/users/register', this.newUser)
+    addToAPI() {
+      let NewUser = { ...this.User };
+      axios
+        .post("http://localhost:5000/api/users/register", NewUser)
         .then(() => {
-          this.fetchUsers();
-          this.newUser = { name: "", firstname: "", email: "", password: "" };
+          this.fetchUsers();  // Mise à jour de la liste après ajout
+          this.User = { name: "", firstname: "", email: "", password: "" }; // Réinitialisation du formulaire
         })
         .catch((error) => {
           if (error.response && error.response.status === 409) {
@@ -117,45 +114,40 @@ export default {
           }
         });
     },
-    validateEmail(userType) {
-      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const email = userType === 'new' ? this.newUser.email : this.currentUser.email;
-      this.emailError = pattern.test(email) ? "" : "L'adresse email ne respecte pas le format requis.";
-    },
-    validatePassword(userType) {
-      const pattern = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).{12,}$/;
-      const password = userType === 'new' ? this.newUser.password : this.currentUser.password;
-      this.passwordError = pattern.test(password) ? "" : "Le mot de passe doit contenir au moins 12 caractères, un chiffre, une majuscule et un caractère spécial.";
-    },
     editUser(user) {
-      this.currentUser = { ...user };
-      this.isEditing = true;
+      this.User = { ...user }; // Chargement des données de l'utilisateur pour modification
     },
     updateUser() {
-      if (!this.ChangeformIsValid) return;
-      axios.put(`http://localhost:5000/api/users/${this.currentUser._id}`, this.currentUser)
+      if (!this.formIsValid) return;
+      axios.put(`http://localhost:5000/api/users/${this.User._id}`, this.User)
         .then(() => {
-          this.fetchUsers();
-          this.isEditing = false;
-          this.currentUser = { name: "", firstname: "", email: "", password: "" };  // Réinitialise les données après la mise à jour
+          this.fetchUsers();  // Mise à jour de la liste après modification
+          this.User = { name: "", firstname: "", email: "", password: "" }; // Réinitialisation du formulaire
         })
         .catch(error => {
           console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
         });
     },
-
     cancelEdit() {
-      this.currentUser = { name: "", firstname: "", email: "", password: "" };
+      this.User = { name: "", firstname: "", email: "", password: "" };
       this.isEditing = false;
     },
     deleteUser(userId) {
       axios.delete(`http://localhost:5000/api/users/${userId}`)
         .then(() => {
-          this.fetchUsers();  // Rafraîchit la liste après suppression
+          this.fetchUsers();  // Mise à jour de la liste après suppression
         })
         .catch(error => {
           console.error("Erreur lors de la suppression de l'utilisateur:", error);
         });
+    },
+    validateEmail() {
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.emailError = pattern.test(this.User.email) ? "" : "L'adresse email ne respecte pas le format requis.";
+    },
+    validatePassword() {
+      const pattern = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).{12,}$/;
+      this.passwordError = pattern.test(this.User.password) ? "" : "Le mot de passe doit contenir au moins 12 caractères, un chiffre, une majuscule et un caractère spécial.";
     },
     logout() {
       // Supprimez le token d'authentification ou toute autre donnée de session
@@ -166,32 +158,23 @@ export default {
     }
   },
   computed: {
-      formIsValid() {
-        return (
-          this.newUser.name &&
-          this.newUser.firstname &&
-          this.newUser.email &&
-          this.newUser.password &&
-          !this.emailError &&
-          !this.passwordError
-        );
-      },
-      ChangeformIsValid() {
-        return (
-          this.currentUser.name &&
-          this.currentUser.firstname &&
-          this.currentUser.email &&
-          this.currentUser.password &&
-          !this.emailError &&
-          !this.passwordError
-        );
-      }
+    formIsValid() {
+      return (
+        this.User.name &&
+        this.User.firstname &&
+        this.User.email &&
+        this.User.password &&
+        !this.emailError &&
+        !this.passwordError
+      );
+    },
   },
   created() {
-      this.fetchUsers();
+    this.fetchUsers();
   },
 };
 </script>
+
 
 <style scoped>
 .navbar-brand {
