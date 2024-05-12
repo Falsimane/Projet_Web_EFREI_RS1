@@ -30,7 +30,7 @@
 
     <div class="container">
       <p>Contenu de la page de gestion des utilisateurs</p>
-      <h1>Gestion des Utilisateurs</h1>
+      <h1>Gestion des Utilisateurs {{ editUser }} {{ addToAPI }}</h1>
       <div>
         <input v-model="User.name" placeholder="Nom">
         <input v-model="User.firstname" placeholder="Prénom">
@@ -38,11 +38,11 @@
         <span>{{ emailError }}</span>
         <input v-model="User.password" type="password" placeholder="Mot de passe" @blur="validatePassword">
         <span>{{ passwordError }}</span>
-        <button @click="addToAPI" :disabled="!formIsValid">Ajouter Utilisateur</button>
+        <div v-if="editUser"><button @click="updateUser" :disabled="!formIsValid">Modifier Utilisateur</button></div>
+        <div v-if="addToAPI"><button @click="addToAPI" :disabled="!formIsValid">Ajouter Utilisateur</button></div>
       </div>
       <ul class="list-group">
         <br>
-        {{ User.name }} - {{ User.firstname }} - {{ User.email }}
         <li class="list-group-item" v-for="user in usersList" :key="user._id">
           {{ user.name }} {{ user.firstname }} - {{ user.email }}
           <button class="btn btn-primary" @click="editUser(user)">Modifier</button>

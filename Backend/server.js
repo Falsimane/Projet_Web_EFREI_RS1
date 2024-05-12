@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const User = require('./models/User'); // Assurez-vous que le chemin vers votre modèle User est correct
 
 const app = express();
 
@@ -22,13 +21,12 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // Connexion à MongoDB
-mongoose.connect('mongodb://localhost:27017/WebUsers', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+mongoose.connect("mongodb://127.0.0.1:27017/WebUsers")
+  .then(() => {
+    console.log("MongoDB Connected")
+  }).catch(err => {
+    console.error("Failed to connect to MongoDB", err);
+  });
 
 // Route pour l'enregistrement d'un nouvel utilisateur
 app.post("/api/users/register", async (req, res) => {
@@ -82,10 +80,33 @@ app.post("/api/utilisateurs/login", async (req, res) => {
 app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find(); // Utilisez find() sans paramètres pour récupérer tous les utilisateurs
-    res.json(users);
+    res.send(users);
   } catch (error) {
     console.log('Error fetching users:', error); // Log l'erreur dans la console du serveur
     res.status(500).json({ message: 'Error fetching users', error: error }); // Envoie l'erreur au client
+  }
+});
+
+// Route pour mettre à jour un utilisateur
+app.put('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, firstname, email, password } = req.body;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, {
+      name: name,
+      firstname: firstname,
+      email: email,
+      password: password
+    }, { new: true }); // L'option { new: true } s'assure que la méthode renvoie l'utilisateur mis à jour
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Error updating user", error: error });
   }
 });
 
