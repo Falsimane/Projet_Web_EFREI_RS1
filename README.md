@@ -1,6 +1,6 @@
 # Projet_Web_EFREI_RS1
 
-Pour lancer le node.js, utilisez la commande : node server.js.
+Pour lancer le node.js, utiliser la commande : node server.js.
 
 On a besoin, avant ça, du module "express".
 arnaud@Arnaud:~/C/Efrei/S6/Dev_Web/Javascript/Projet/Projet_Web_EFREI_RS1/Backend$ npm install express
