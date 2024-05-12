@@ -110,6 +110,24 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
+// Route pour supprimer un utilisateur spécifique par son ID
+app.delete('/api/users/:id', async (req, res) => {
+  const { id } = req.params; // L'ID de l'utilisateur à supprimer
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" }); // Si aucun utilisateur n'est trouvé avec cet ID, renvoyer une erreur 404
+    }
+
+    res.status(200).json({ message: "User deleted successfully" }); // Confirmer la suppression
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Error deleting user", error: error }); // Gérer les erreurs éventuelles
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

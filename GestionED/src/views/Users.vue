@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
-        <a class="navbar-brand" href="#">Gestion des utilisateurs</a>
+        <a class="navbar-brand" href="/users">Gestion des utilisateurs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,7 +38,6 @@
         <span>{{ emailError }}</span>
         <input class="w-25 p-0" v-model="User.password" type="password" placeholder="Mot de passe" @blur="validatePassword">
         <span>{{ passwordError }}</span>
-
         
         <div class="w-25 p-1" v-if="Modifier">
           <button @click="updateUser" :disabled="!formIsValid">Modifier Utilisateur</button>                   
