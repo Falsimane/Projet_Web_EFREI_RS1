@@ -3,21 +3,11 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-
-const uploadFolder = "Stockage";
-
-// Création du dossier si il n'existe pas
-if (!fs.existsSync(uploadFolder)){
-  fs.mkdirSync(uploadFolder, { recursive: true });
-}
 
 // Définition du schéma de l'utilisateur
 const userSchema = new mongoose.Schema({
@@ -30,19 +20,6 @@ const userSchema = new mongoose.Schema({
 // Création du modèle User
 const User = mongoose.model("User", userSchema);
 
-// Définition du schéma du document
-const documentSchema = new mongoose.Schema({
-  type: { type: String, required: false },
-  name: { type: String, required: true },
-  description: { type: String, required: false },
-  date: { type: Date, default: Date.now },
-  size: { type: Number, required: true },
-  filePath: { type: String, required: true }
-});
-
-// Création du modèle Document
-const Document = mongoose.model("Document", documentSchema);
-
 // Connexion à MongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/WebUsers")
   .then(() => {
@@ -50,18 +27,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/WebUsers")
   }).catch(err => {
     console.error("Failed to connect to MongoDB", err);
   });
-
-// Configuration de Multer pour le stockage des fichiers
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadFolder);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
-
-const upload = multer({ storage });
 
 // Route pour l'enregistrement d'un nouvel utilisateur
 app.post("/api/users/register", async (req, res) => {
@@ -160,109 +125,6 @@ app.delete('/api/users/:id', async (req, res) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).json({ message: "Error deleting user", error: error }); // Gérer les erreurs éventuelles
-  }
-});
-
-// Route pour télécharger un fichier
-app.post('/api/documents', upload.single('file'), (req, res) => {
-  res.status(201).send({ message: "File uploaded successfully" });
-});
-
-// Route pour obtenir la liste des fichiers
-app.get('/api/documents', (req, res) => {
-  fs.readdir(uploadFolder, (err, files) => {
-    if (err) {
-      return res.status(500).send({ message: "Unable to scan files" });
-    }
-    const fileList = files.map(file => {
-      const filePath = path.join(uploadFolder, file);
-      const stats = fs.statSync(filePath);
-      return {
-        name: file,
-        size: stats.size,
-        path: filePath,
-        date: stats.mtime
-      };
-    });
-    res.send(fileList);
-  });
-});
-
-// Route pour télécharger un fichier spécifique
-app.get('/api/documents/download/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(uploadFolder, filename);
-  res.download(filePath, filename, (err) => {
-    if (err) {
-      console.error("Error downloading file:", err);
-      res.status(500).send({ message: "Error downloading file" });
-    }
-  });
-});
-
-// Route pour supprimer un fichier spécifique
-app.delete('/api/documents/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(uploadFolder, filename);
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error("Error deleting file:", err);
-      return res.status(500).send({ message: "Error deleting file" });
-    }
-    res.send({ message: "File deleted successfully" });
-  });
-});
-
-// Route pour créer un nouveau document dans la BDD
-app.post('/api/documents/add', upload.single('file'), async (req, res) => {
-  try {
-    const { type, name, description, size, filePath } = req.body;
-
-    const newDocument = new Document({
-      type,
-      name,
-      description,
-      size,
-      filePath
-    });
-
-    await newDocument.save();
-    res.status(201).send(newDocument);
-  } catch (error) {
-    console.error("Error saving document metadata:", error);
-    res.status(400).send(error);
-  }
-});
-
-// Route pour obtenir tous les documents dans la BDD
-app.get('/api/documents', async (req, res) => {
-  try {
-    const documents = await Document.find();
-    res.send(documents);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Route pour supprimer un fichier spécifique et son document
-app.delete('/api/documents/delete/:filename', async (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(uploadFolder, filename);
-
-  try {
-    // Supprimer le fichier du système de fichiers
-    fs.unlinkSync(filePath);
-
-    // Supprimer le document de la base de données
-    const deletedDocument = await Document.findOneAndDelete({ name: filename });
-    if (!deletedDocument) {
-      return res.status(404).send({ message: "Document not found in database" });
-    }
-
-    res.send({ message: "File and document deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting file or document:", error);
-    res.status(500).send({ message: "Error deleting file or document" });
   }
 });
 
