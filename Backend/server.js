@@ -188,6 +188,17 @@ app.get('/api/documents', (req, res) => {
   });
 });
 
+// Route pour rechercher des documents par nom
+app.get('/api/documents/search', async (req, res) => {
+  const { name } = req.query;
+  try {
+    const documents = await Document.find({ name: { $regex: name, $options: 'i' } });
+    res.send(documents);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Route pour télécharger un fichier spécifique
 app.get('/api/documents/download/:filename', (req, res) => {
   const filename = req.params.filename;
