@@ -255,6 +255,16 @@ app.get('/api/documents', async (req, res) => {
   }
 });
 
+// Route pour obtenir les documents triés par type
+app.get('/api/documents/stats', async (req, res) => {
+  try {
+    const documents = await Document.find().sort({ type: 1 });
+    res.send(documents);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Route pour supprimer un fichier spécifique et son document
 app.delete('/api/documents/delete/:filename', async (req, res) => {
   const filename = req.params.filename;
