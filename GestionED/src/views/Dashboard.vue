@@ -18,9 +18,6 @@
             <router-link to="/search" class="nav-link btn btn-link">Fonction de recherche</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/print" class="nav-link btn btn-link">Impression</router-link>
-          </li>
-          <li class="nav-item">
             <button @click="logout" class="nav-link btn btn-link">Déconnexion</button>
           </li>
         </ul>
@@ -82,10 +79,6 @@ export default {
     fonctionRecherche() {
       // Redirection vers la page de fonction de recherche
       this.$router.push({ name: 'FonctionRecherche' });
-    },
-    impression() {
-      // Redirection vers la page d'impression
-      this.$router.push({ name: 'Impression' });
     },
     logout() {
       // Supprimez le token d'authentification ou toute autre donnée de session

@@ -24,9 +24,6 @@
               <router-link to="/search" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Fonction de recherche</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/print" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Impression</router-link>
-            </li>
-            <li class="nav-item">
               <!-- Bouton de retour au dashboard -->
               <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
             </li>

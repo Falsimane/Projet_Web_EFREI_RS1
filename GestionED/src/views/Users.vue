@@ -15,9 +15,6 @@
               <router-link to="/search" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Fonction de recherche</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/print" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i>Impression</router-link>
-            </li>
-            <li class="nav-item">
               <router-link to="/dashboard" class="nav-link btn btn-link mr-3"> <i class="fas fa-arrow-left"></i> Retour au Menu Principal </router-link>
             </li>
             <li class="nav-item">
@@ -97,10 +94,6 @@ export default {
     fonctionRecherche() {
       // Redirection vers la page de fonction de recherche
       this.$router.push({ name: 'FonctionRecherche' });
-    },
-    impression() {
-      // Redirection vers la page d'impression
-      this.$router.push({ name: 'Impression' });
     },
     fetchUsers() {
       axios.get('http://localhost:5000/api/users')
