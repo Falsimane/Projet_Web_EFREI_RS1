@@ -55,41 +55,26 @@
         <div class="input-group mb-3">
           <input type="file" class="form-control" @change="handleFileUpload" />
         </div>
-        <div class="mb-4">
-          <input v-model="fileInfo.type" class="form-control mb-2" placeholder="Type" />
-          <input
-            v-model="fileInfo.description"
-            class="form-control mb-2"
-            placeholder="Description"
-          />
-          <button class="btn btn-primary" @click="addFileToDB">
-            Ajouter à la base de Données
-          </button>
-        </div>
 
-        <h2 class="mb-4">Liste des Fichiers</h2>
+        <h2>Liste des Fichiers</h2>
         <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            v-for="file in filesList"
-            :key="file.name"
-          >
-            <div class="file-details">
-              <div>{{ file.name }}</div>
-              <div>{{ file.size }} bytes</div>
-              <div>{{ file.date }}</div>
-              <div>{{ file.path }}</div>
+          <li class="list-group-item d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3" v-for="file in filesList" :key="file.name">
+            <div class="w-100 w-md-25 p-2">{{ file.name }}</div>
+            <div class="w-100 w-md-25 p-2">{{ file.size }} bytes</div>
+            <div class="w-100 w-md-25 p-2">{{ file.date }}</div>
+            <div class="w-100 w-md-25 p-2">{{ file.path }}</div>
+            <div class="w-100 w-md-25 p-2">
+              <input v-model="file.type" class="form-control mb-2" placeholder="Type">
+              <input v-model="file.description" class="form-control mb-2" placeholder="Description">
             </div>
-            <div class="file-actions d-flex">
-              <button class="btn btn-secondary mr-2" @click="downloadFile(file.name)">
-                Télécharger
-              </button>
-              <button class="btn btn-danger" @click="confirmDeleteFile(file.name)">
-                Supprimer
-              </button>
+            <div class="d-flex justify-content-between w-100 w-md-75 mt-2 mt-md-0">
+              <button class="btn btn-primary me-2" @click="addFileToDB(file)">Ajouter à la base de Données</button>
+              <button class="btn btn-secondary me-2" @click="downloadFile(file.name)">Télécharger</button>
+              <button class="btn btn-danger" @click="deleteFile(file.name)">Supprimer</button>
             </div>
           </li>
         </ul>
+
       </div>
     </div>
   </div>
@@ -117,6 +102,7 @@ export default {
     handleFileUpload(event) {
       this.file = event.target.files[0];
       this.fileInfo.name = this.file.name;
+      this.uploadFile();
     },
     async uploadFile() {
       const formData = new FormData();
@@ -133,13 +119,21 @@ export default {
         console.error("Error uploading file:", error);
       }
     },
-    async addFileToDB() {
-      if (!this.file) {
-        alert("Veuillez sélectionner un fichier d'abord");
-        return;
+    async addFileToDB(file) {
+      const metadata = {
+        type: file.type || 'Unknown', // Capture the type or default to 'Unknown'
+        name: file.name,
+        description: file.description || '',
+        size: file.size,
+        filePath: `C:/Users/arnau/Documents/Stockage/${file.name}`
+      };
+
+      try {
+        await axios.post('http://localhost:5000/api/documents/add', metadata);
+        alert("Fichier ajouté avec succès à la base de données");
+      } catch (error) {
+        console.error('Error adding file metadata to database:', error);
       }
-      await this.uploadFile();
-      alert("Fichier ajouté avec succès à la base de données");
     },
     async fetchFiles() {
       try {
