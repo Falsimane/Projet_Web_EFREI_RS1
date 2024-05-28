@@ -29,11 +29,6 @@
               <router-link to="/stats" class="nav-link">Statistiques</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/search" class="nav-link"
-                >Fonction de recherche</router-link
-              >
-            </li>
-            <li class="nav-item">
               <router-link to="/dashboard" class="nav-link"
                 >Retour au Menu Principal</router-link
               >
